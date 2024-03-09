@@ -298,6 +298,12 @@ namespace LancerEdit
                         recentFiles.FileOpened(f);
                         AddTab(lt);
                         break;
+                    case FileType.BinaryIni:
+					case FileType.TextIni:
+                        var it = new IniTab(this, f);
+                        recentFiles.FileOpened(f);
+                        AddTab(it);
+                        break;
                     case FileType.SaveGame:
                         var st = new SaveGameTab(f);
                         recentFiles.FileOpened(f);
