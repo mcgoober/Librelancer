@@ -11,7 +11,8 @@ namespace LibreLancer.ImUI
     public enum ColorTextEditMode
     {
         Normal,
-        Lua
+        Lua,
+        Ini
     }
     public class ColorTextEdit : IDisposable
     {

@@ -1,23 +1,21 @@
 using ImGuiNET;
-using LibreLancer.ContentEdit;
+using LibreLancer;
 using LibreLancer.ImUI;
-using LibreLancer.Ini;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.Unicode;
-using System.Threading.Tasks;
 
 namespace LancerEdit
 {
     internal class IniTab : EditorTab
     {
         private readonly MainWindow window;
+        private readonly ColorTextEdit colorTextEdit;
 
         private string _filePath;
+        private readonly EditableIni ini;
+        private EditableIni.IniNode selectedNode = null;
+        private ImGuiTreeNodeFlags tflags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.OpenOnDoubleClick;
+        private BitArray128 openTabs;
 
         public string FilePath
         {
@@ -33,24 +31,59 @@ namespace LancerEdit
             }
         }
 
-        private readonly EditableIni ini;
-        EditableIni.IniNode selectedNode = null;
-        ImGuiTreeNodeFlags tflags = ImGuiTreeNodeFlags.OpenOnArrow | ImGuiTreeNodeFlags.OpenOnDoubleClick;
-
         public IniTab(MainWindow window, string file)
         {
             this.window = window;
             FilePath = file;
             ini = new EditableIni(file);
+            colorTextEdit = new ColorTextEdit();
+            colorTextEdit.SetMode(ColorTextEditMode.Ini);
+            colorTextEdit.SetText(ini.TextContents);
+            openTabs = new BitArray128();
+            openTabs[0] = true;
+        }
+
+        
+
+        void TabButton(string name, int idx)
+        {
+            if (TabHandler.VerticalTab($"{name}", openTabs[idx]))
+            {
+                if (!openTabs[idx])
+                {
+                    openTabs = new BitArray128();
+                    openTabs[idx] = true;
+                }
+            }
         }
 
         public override void Draw(double elapsed)
         {
+            ImGui.Columns(2, "TabColumns", false);
+            ImGui.SetColumnWidth(0, 40f);
+            ImGuiNative.igBeginGroup();
+            TabButton("Hierarchy", 0);
+            TabButton("Source", 1);
+            ImGuiNative.igEndGroup();
+            //ImGui.SameLine();
+            ImGui.NextColumn();
+
+            ImGui.BeginChild("##tabchild");
+            if (openTabs.Any())
+            {
+                if (openTabs[0]) Hierarchy();
+                if (openTabs[1]) Source();
+            }
+            ImGui.EndChild();
+        }
+        private void Hierarchy()
+        {
+
             ImGui.Columns(2, "IniColumns", true);
             ImGui.Separator();
-            ImGui.Text("Ini Sections");
+            ImGui.Text("Sections");
             ImGui.NextColumn();
-            ImGui.Text("Entry Information");
+            ImGui.Text("Entry Values");
             ImGui.NextColumn();
             ImGui.Separator();
             //Tree
@@ -65,9 +98,15 @@ namespace LancerEdit
             if (selectedNode is EditableIni.EntryIniNode entryNode)
             {
                 ImGui.NextColumn();
-                ImGui.Text(entryNode.Entry.FirstOrDefault()?.ToString());
-            }
-            
+                var value = entryNode.Entry.FirstOrDefault()?.ToString();
+                if (value != null)
+                    ImGui.Text(value);
+            }            
+        }
+
+        private void Source()
+        {
+            colorTextEdit.Render("##ColorTextEditor");
         }
 
         void DoNode(EditableIni.IniNode node, int idx)

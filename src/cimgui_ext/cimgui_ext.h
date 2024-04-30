@@ -35,7 +35,8 @@ IGEXPORT void igExtMemoryEditFree(memoryedit_t memedit);
 typedef void *texteditor_t;
 typedef enum texteditor_mode {
     TEXTEDITOR_MODE_NORMAL,
-    TEXTEDITOR_MODE_LUA
+    TEXTEDITOR_MODE_LUA,
+	TEXTEDITOR_MODE_INI
 } texteditor_mode_t;
 IGEXPORT texteditor_t igExtTextEditorInit();
 IGEXPORT const char *igExtTextEditorGetText(texteditor_t textedit);

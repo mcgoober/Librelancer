@@ -27,7 +27,7 @@ namespace LancerEdit
         private void LoadFile()
         {
             var stream = new FileStream(File, FileMode.Open, FileAccess.Read);
-            var sections = IniFile.ParseFile(File, stream);
+            var sections = IniFile.ParseFile(File, stream).ToList();
             foreach (var section in sections)
             {
                 var sectionNode = new SectionIniNode() { Section = section };
@@ -38,6 +38,7 @@ namespace LancerEdit
                     sectionNode.Children.Add(entryNode);
                 }
             }
+            TextContents = sections.IniToText();
         }
 
         public class IniNode
