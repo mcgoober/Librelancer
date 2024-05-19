@@ -59,15 +59,15 @@ namespace LibreLancer.Thn.Events
 
                 if (t > Duration)
                     if (LookAt && Child.Camera != null) Child.Camera.LookAt = null;
-                if(Offset != Vector3.Zero) { //TODO: This can be optimised
-                    var off = Offset;
-                    if (EntityRelative)
-                    {
-                        off = Vector3.Transform(Offset, rotate.ExtractRotation());
-                    }
-                    var tr = rotate * Matrix4x4.CreateTranslation(translate) * Matrix4x4.CreateTranslation(off);
+                if (Offset != Vector3.Zero)
+                {
+                    var tr = Matrix4x4.CreateTranslation(translate) *
+                        Matrix4x4.CreateTranslation(
+                            EntityRelative
+                                ? Vector3.Transform(Offset, Parent.Rotate.ExtractRotation())
+                                : Offset
+                            );
                     translate = tr.Translation;
-                    rotate = Matrix4x4.CreateFromQuaternion(tr.ExtractRotation());
                 }
                 if (Position)
                     Child.Translate = translate;

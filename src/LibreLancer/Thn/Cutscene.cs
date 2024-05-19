@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using LibreLancer.Client.Components;
@@ -329,7 +330,11 @@ namespace LibreLancer.Thn
                 soundManager.UpdateListener(delta, pos, forward, up);
             }
 			currentTime += delta;
-            foreach (var obj in sceneObjects.Values) obj.UpdateIfMain();
+            foreach (var obj in sceneObjects.Values)
+            {
+                obj.UpdateIfMain();
+                Debug.WriteLineIf(obj.Name == "space_arch_chunk1b_6", obj.Translate);
+            }
             if (text != null)
             {
                 if (currentTime > text.Start)

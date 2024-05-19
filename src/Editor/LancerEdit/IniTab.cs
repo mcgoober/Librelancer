@@ -59,6 +59,7 @@ namespace LancerEdit
 
         public override void Draw(double elapsed)
         {
+            //ImGui.GetStyle().ScaleAllSizes(2);
             ImGui.Columns(2, "TabColumns", false);
             ImGui.SetColumnWidth(0, 40f);
             ImGuiNative.igBeginGroup();
