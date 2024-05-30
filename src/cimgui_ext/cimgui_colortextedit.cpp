@@ -22,15 +22,15 @@ const TextEditor::LanguageDefinition& Ini()
 		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[+-]?[0-9]+[Uu]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
 		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("0[0-7]+[Uu]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
 		//langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("0[xX][0-9a-fA-F]+[uU]?[lL]?[lL]?", TextEditor::PaletteIndex::Number));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[a-zA-Z_][a-zA-Z0-9_]*", TextEditor::PaletteIndex::Identifier));
-		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[\\[\\]\\=]", TextEditor::PaletteIndex::Punctuation));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[a-zA-Z0-9_\\-]+", TextEditor::PaletteIndex::KnownIdentifier));
+		langDef.mTokenRegexStrings.push_back(std::make_pair<std::string, TextEditor::PaletteIndex>("[\\[\\]\\=\\,]", TextEditor::PaletteIndex::Punctuation));
 
-		//langDef.mCommentStart = "/*";
-		//langDef.mCommentEnd = "*/";
+		langDef.mCommentStart = "/*";
+		langDef.mCommentEnd = "*/";
 		langDef.mSingleLineComment = ";";
 
 		langDef.mCaseSensitive = true;
-		//langDef.mAutoIndentation = true;
+		langDef.mAutoIndentation = false;
 
 		langDef.mName = "Ini";
 
